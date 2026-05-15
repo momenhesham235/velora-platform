@@ -1,5 +1,5 @@
-import crypto from 'crypto';
-import { User, IUserDocument } from './auth.model';
+import crypto from "crypto";
+import { User, IUserDocument } from "./auth.model";
 import {
   RegisterDTO,
   LoginDTO,
@@ -7,16 +7,16 @@ import {
   ForgotPasswordDTO,
   ResetPasswordDTO,
   VerifyEmailDTO,
-} from './auth.types';
-import { PasswordUtil } from '@utils/password.util';
-import { JwtUtil } from '@utils/jwt.util';
-import { EmailService } from '@infrastructure/email/email.service';
-import { ApiError } from '@core/ApiError';
-import { logger } from '@core/logger';
+} from "./auth.types";
+import { PasswordUtil } from "@shared/utils/password.util";
+import { JwtUtil } from "@shared/utils/jwt.util";
+import { EmailService } from "@infrastructure/email/email.service";
+import { ApiError } from "@core/ApiError";
+import { logger } from "@core/logger";
 
 /**
  * Authentication Service
- * 
+ *
  * Contains all business logic for authentication operations
  * Separated from controllers for better testability and reusability
  */
@@ -32,14 +32,14 @@ export class AuthService {
     // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      throw ApiError.conflict('User with this email already exists');
+      throw ApiError.conflict("User with this email already exists");
     }
 
     // Hash password
     const hashedPassword = await PasswordUtil.hash(password);
 
     // Generate email verification token
-    const verificationToken = crypto.randomBytes(32).toString('hex');
+    const verificationToken = crypto.randomBytes(32).toString("hex");
     const verificationExpires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
 
     // Create user
@@ -88,15 +88,17 @@ export class AuthService {
     const { email, password } = data;
 
     // Find user with password field
-    const user = await User.findOne({ email }).select('+password +refreshTokens');
+    const user = await User.findOne({ email }).select(
+      "+password +refreshTokens",
+    );
     if (!user) {
-      throw ApiError.unauthorized('Invalid email or password');
+      throw ApiError.unauthorized("Invalid email or password");
     }
 
     // Verify password
     const isPasswordValid = await PasswordUtil.compare(password, user.password);
     if (!isPasswordValid) {
-      throw ApiError.unauthorized('Invalid email or password');
+      throw ApiError.unauthorized("Invalid email or password");
     }
 
     // Generate tokens
@@ -129,19 +131,21 @@ export class AuthService {
   /**
    * Refresh access token
    */
-  static async refreshToken(refreshToken: string): Promise<{ accessToken: string }> {
+  static async refreshToken(
+    refreshToken: string,
+  ): Promise<{ accessToken: string }> {
     // Verify refresh token
     let payload;
     try {
       payload = JwtUtil.verifyRefreshToken(refreshToken);
     } catch (error) {
-      throw ApiError.unauthorized('Invalid or expired refresh token');
+      throw ApiError.unauthorized("Invalid or expired refresh token");
     }
 
     // Find user and verify refresh token exists
-    const user = await User.findById(payload.userId).select('+refreshTokens');
+    const user = await User.findById(payload.userId).select("+refreshTokens");
     if (!user || !user.refreshTokens.includes(refreshToken)) {
-      throw ApiError.unauthorized('Invalid refresh token');
+      throw ApiError.unauthorized("Invalid refresh token");
     }
 
     // Generate new access token
@@ -158,13 +162,15 @@ export class AuthService {
    * Logout user
    */
   static async logout(userId: string, refreshToken: string): Promise<void> {
-    const user = await User.findById(userId).select('+refreshTokens');
+    const user = await User.findById(userId).select("+refreshTokens");
     if (!user) {
-      throw ApiError.notFound('User not found');
+      throw ApiError.notFound("User not found");
     }
 
     // Remove refresh token
-    user.refreshTokens = user.refreshTokens.filter((token) => token !== refreshToken);
+    user.refreshTokens = user.refreshTokens.filter(
+      (token) => token !== refreshToken,
+    );
     await user.save();
 
     logger.info(`User logged out: ${user.email}`);
@@ -179,10 +185,10 @@ export class AuthService {
     const user = await User.findOne({
       emailVerificationToken: token,
       emailVerificationExpires: { $gt: new Date() },
-    }).select('+emailVerificationToken +emailVerificationExpires');
+    }).select("+emailVerificationToken +emailVerificationExpires");
 
     if (!user) {
-      throw ApiError.badRequest('Invalid or expired verification token');
+      throw ApiError.badRequest("Invalid or expired verification token");
     }
 
     user.isEmailVerified = true;
@@ -210,7 +216,7 @@ export class AuthService {
     }
 
     // Generate reset token
-    const resetToken = crypto.randomBytes(32).toString('hex');
+    const resetToken = crypto.randomBytes(32).toString("hex");
     const resetExpires = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
 
     user.passwordResetToken = resetToken;
@@ -232,20 +238,22 @@ export class AuthService {
     const user = await User.findOne({
       passwordResetToken: token,
       passwordResetExpires: { $gt: new Date() },
-    }).select('+password +passwordResetToken +passwordResetExpires +refreshTokens');
+    }).select(
+      "+password +passwordResetToken +passwordResetExpires +refreshTokens",
+    );
 
     if (!user) {
-      throw ApiError.badRequest('Invalid or expired reset token');
+      throw ApiError.badRequest("Invalid or expired reset token");
     }
 
     // Hash new password
     user.password = await PasswordUtil.hash(newPassword);
     user.passwordResetToken = undefined;
     user.passwordResetExpires = undefined;
-    
+
     // Invalidate all refresh tokens for security
     user.refreshTokens = [];
-    
+
     await user.save();
 
     logger.info(`Password reset completed: ${user.email}`);
@@ -257,7 +265,7 @@ export class AuthService {
   static async getProfile(userId: string): Promise<IUserDocument> {
     const user = await User.findById(userId);
     if (!user) {
-      throw ApiError.notFound('User not found');
+      throw ApiError.notFound("User not found");
     }
     return user;
   }

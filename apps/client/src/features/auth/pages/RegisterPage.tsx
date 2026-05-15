@@ -1,14 +1,14 @@
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Link } from 'react-router-dom';
-import { Button, Input } from '@/shared/components/ui';
-import { useRegister } from '../hooks/useRegister';
-import { RegisterData } from '../types';
-import { registerSchema } from '@/lib/validators/auth.validator';
-import { extractErrorMessage } from '@/services/api/handlers';
-import { AuthLayout } from '../components/AuthLayout';
-import { FormError } from '../components/FormError';
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Link } from "react-router-dom";
+import { Button, Input } from "@/shared/components/ui";
+import { useRegister } from "../hooks/useRegister";
+import { RegisterData } from "../types";
+import { registerSchema } from "@/features/auth/validators/auth.validator";
+import { extractErrorMessage } from "@/services/api/handlers";
+import { AuthLayout } from "../components/AuthLayout";
+import { FormError } from "../components/FormError";
 
 export function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -20,15 +20,15 @@ export function RegisterPage() {
     formState: { errors },
   } = useForm<RegisterData>({
     resolver: zodResolver(registerSchema),
-    mode: 'onBlur',
+    mode: "onBlur",
   });
 
   const { mutate: registerUser, isPending, error } = useRegister();
   const errorMessage = error
-    ? extractErrorMessage(error, 'Registration failed. Please try again.')
+    ? extractErrorMessage(error, "Registration failed. Please try again.")
     : null;
 
-  const password = watch('password') ?? '';
+  const password = watch("password") ?? "";
   const strength = scorePassword(password);
 
   const onSubmit = (data: RegisterData) => registerUser(data);
@@ -40,13 +40,13 @@ export function RegisterPage() {
       brandHeadline="Ship work, not Slack threads."
       brandTagline="Workspaces, projects, sprints and real-time tasks — designed so your team feels less busy and more productive."
       brandBullets={[
-        'Unlimited workspaces on the free plan',
-        'Live collaboration over Socket.io',
-        'Role-based access from day one',
+        "Unlimited workspaces on the free plan",
+        "Live collaboration over Socket.io",
+        "Role-based access from day one",
       ]}
       footer={
         <>
-          Already have an account?{' '}
+          Already have an account?{" "}
           <Link
             to="/login"
             className="font-medium text-primary transition-colors hover:text-primary-400"
@@ -62,14 +62,14 @@ export function RegisterPage() {
             label="First name"
             placeholder="John"
             autoComplete="given-name"
-            {...register('firstName')}
+            {...register("firstName")}
             error={errors.firstName?.message}
           />
           <Input
             label="Last name"
             placeholder="Doe"
             autoComplete="family-name"
-            {...register('lastName')}
+            {...register("lastName")}
             error={errors.lastName?.message}
           />
         </div>
@@ -79,24 +79,24 @@ export function RegisterPage() {
           type="email"
           placeholder="you@company.com"
           autoComplete="email"
-          {...register('email')}
+          {...register("email")}
           error={errors.email?.message}
         />
 
         <div className="space-y-2">
           <Input
             label="Password"
-            type={showPassword ? 'text' : 'password'}
+            type={showPassword ? "text" : "password"}
             placeholder="At least 8 characters"
             autoComplete="new-password"
-            {...register('password')}
+            {...register("password")}
             error={errors.password?.message}
             endContent={
               <button
                 type="button"
                 onClick={() => setShowPassword((v) => !v)}
                 className="text-default-500 transition-colors hover:text-foreground focus:outline-none"
-                aria-label={showPassword ? 'Hide password' : 'Show password'}
+                aria-label={showPassword ? "Hide password" : "Show password"}
               >
                 {showPassword ? <EyeOff /> : <Eye />}
               </button>
@@ -107,25 +107,31 @@ export function RegisterPage() {
 
         <Input
           label="Confirm password"
-          type={showPassword ? 'text' : 'password'}
+          type={showPassword ? "text" : "password"}
           placeholder="Re-enter password"
           autoComplete="new-password"
-          {...register('confirmPassword')}
+          {...register("confirmPassword")}
           error={errors.confirmPassword?.message}
         />
 
         <FormError message={errorMessage} />
 
-        <Button type="submit" variant="primary" size="lg" loading={isPending} fullWidth>
-          {isPending ? 'Creating account…' : 'Create account'}
+        <Button
+          type="submit"
+          variant="primary"
+          size="lg"
+          loading={isPending}
+          fullWidth
+        >
+          {isPending ? "Creating account…" : "Create account"}
         </Button>
 
         <p className="text-center text-xs leading-relaxed text-default-500">
-          By creating an account you agree to Velora&apos;s{' '}
+          By creating an account you agree to Velora&apos;s{" "}
           <a className="text-foreground/80 underline-offset-2 hover:underline">
             Terms
-          </a>{' '}
-          and{' '}
+          </a>{" "}
+          and{" "}
           <a className="text-foreground/80 underline-offset-2 hover:underline">
             Privacy Policy
           </a>
@@ -143,18 +149,18 @@ function scorePassword(pw: string) {
   if (/[a-z]/.test(pw)) score++;
   if (/\d/.test(pw)) score++;
   if (/[@$!%*?&]/.test(pw)) score++;
-  const labels = ['Too short', 'Weak', 'Okay', 'Good', 'Strong', 'Excellent'];
-  return { score, label: labels[score] ?? '' };
+  const labels = ["Too short", "Weak", "Okay", "Good", "Strong", "Excellent"];
+  return { score, label: labels[score] ?? "" };
 }
 
 function StrengthMeter({ score, label }: { score: number; label: string }) {
   const segments = 5;
   const colorFor = (idx: number) => {
-    if (idx >= score) return 'bg-content2';
-    if (score <= 1) return 'bg-danger';
-    if (score === 2) return 'bg-warning';
-    if (score === 3) return 'bg-primary-300';
-    return 'bg-success';
+    if (idx >= score) return "bg-content2";
+    if (score <= 1) return "bg-danger";
+    if (score === 2) return "bg-warning";
+    if (score === 3) return "bg-primary-300";
+    return "bg-success";
   };
   return (
     <div className="space-y-1">

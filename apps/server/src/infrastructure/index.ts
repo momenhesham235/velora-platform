@@ -6,3 +6,4 @@
 
 export { db, DatabaseConnection } from './database/mongodb';
 export { EmailService } from './email/email.service';
+export * from './swagger';

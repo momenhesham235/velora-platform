@@ -1,14 +1,14 @@
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Link } from 'react-router-dom';
-import { Button, Checkbox, Input } from '@/shared/components/ui';
-import { useLogin } from '../hooks/useLogin';
-import { LoginCredentials } from '../types';
-import { loginSchema } from '@/lib/validators/auth.validator';
-import { extractErrorMessage } from '@/services/api/handlers';
-import { AuthLayout } from '../components/AuthLayout';
-import { FormError } from '../components/FormError';
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Link } from "react-router-dom";
+import { Button, Checkbox, Input } from "@/shared/components/ui";
+import { useLogin } from "../hooks/useLogin";
+import { LoginCredentials } from "../types";
+import { loginSchema } from "@/features/auth/validators/auth.validator";
+import { extractErrorMessage } from "@/services/api/handlers";
+import { AuthLayout } from "../components/AuthLayout";
+import { FormError } from "../components/FormError";
 
 export function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -23,7 +23,7 @@ export function LoginPage() {
 
   const { mutate: login, isPending, error } = useLogin();
   const errorMessage = error
-    ? extractErrorMessage(error, 'Login failed. Please try again.')
+    ? extractErrorMessage(error, "Login failed. Please try again.")
     : null;
 
   const onSubmit = (data: LoginCredentials) => login(data);
@@ -34,7 +34,7 @@ export function LoginPage() {
       subtitle="Sign in to continue building with your team."
       footer={
         <>
-          Don&apos;t have an account?{' '}
+          Don&apos;t have an account?{" "}
           <Link
             to="/register"
             className="font-medium text-primary transition-colors hover:text-primary-400"
@@ -50,23 +50,23 @@ export function LoginPage() {
           type="email"
           autoComplete="email"
           placeholder="you@company.com"
-          {...register('email')}
+          {...register("email")}
           error={errors.email?.message}
         />
 
         <Input
           label="Password"
-          type={showPassword ? 'text' : 'password'}
+          type={showPassword ? "text" : "password"}
           autoComplete="current-password"
           placeholder="••••••••"
-          {...register('password')}
+          {...register("password")}
           error={errors.password?.message}
           endContent={
             <button
               type="button"
               onClick={() => setShowPassword((v) => !v)}
               className="text-default-500 transition-colors hover:text-foreground focus:outline-none"
-              aria-label={showPassword ? 'Hide password' : 'Show password'}
+              aria-label={showPassword ? "Hide password" : "Show password"}
             >
               {showPassword ? <EyeOff /> : <Eye />}
             </button>
@@ -85,13 +85,25 @@ export function LoginPage() {
 
         <FormError message={errorMessage} />
 
-        <Button type="submit" variant="primary" size="lg" loading={isPending} fullWidth>
-          {isPending ? 'Signing in…' : 'Sign in'}
+        <Button
+          type="submit"
+          variant="primary"
+          size="lg"
+          loading={isPending}
+          fullWidth
+        >
+          {isPending ? "Signing in…" : "Sign in"}
         </Button>
 
         <FormDivider label="or" />
 
-        <Button type="button" variant="secondary" size="lg" fullWidth isDisabled>
+        <Button
+          type="button"
+          variant="secondary"
+          size="lg"
+          fullWidth
+          isDisabled
+        >
           Continue with SSO
           <span className="ml-2 rounded-md bg-content2 px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wider text-default-500">
             Soon

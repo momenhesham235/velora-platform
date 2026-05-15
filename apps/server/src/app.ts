@@ -1,10 +1,12 @@
 import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import swaggerUi from 'swagger-ui-express';
 import { env } from '@config/env.config';
 import { errorHandler, notFoundHandler } from '@middlewares/index';
 import { logger } from '@core/logger';
 import authRoutes from '@modules/auth/auth.routes';
+import { swaggerSpec, swaggerUiOptions } from '@infrastructure/swagger';
 
 /**
  * Express Application Setup
@@ -52,6 +54,22 @@ export const createApp = (): Application => {
   // HEALTH CHECK ROUTE
   // ============================================
 
+  /**
+   * @openapi
+   * /health:
+   *   get:
+   *     tags:
+   *       - Health
+   *     summary: Health check
+   *     description: Check if the API server is running and healthy
+   *     responses:
+   *       200:
+   *         description: API is healthy and running
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/HealthCheck'
+   */
   app.get('/health', (req: Request, res: Response) => {
     res.status(200).json({
       success: true,
@@ -59,6 +77,23 @@ export const createApp = (): Application => {
       timestamp: new Date().toISOString(),
       environment: env.NODE_ENV,
     });
+  });
+
+  // ============================================
+  // API DOCUMENTATION
+  // ============================================
+
+  // Swagger UI - Interactive API documentation
+  app.use(
+    '/api/docs',
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerSpec, swaggerUiOptions)
+  );
+
+  // Swagger JSON - Raw OpenAPI spec
+  app.get('/api/docs.json', (req: Request, res: Response) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.send(swaggerSpec);
   });
 
   // ============================================
@@ -71,7 +106,7 @@ export const createApp = (): Application => {
       success: true,
       message: 'Welcome to Velora API',
       version: '1.0.0',
-      documentation: '/api/docs', // Future: API documentation
+      documentation: '/api/docs',
     });
   });
 

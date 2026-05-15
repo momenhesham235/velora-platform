@@ -1,12 +1,12 @@
-import { Request, Response, NextFunction } from 'express';
-import { JwtUtil } from '@utils/jwt.util';
-import { User } from '@modules/auth/auth.model';
-import { ApiError } from '@core/ApiError';
-import { UserRole } from '@shared/enums/user-role.enum';
+import { Request, Response, NextFunction } from "express";
+import { JwtUtil } from "@shared/utils/jwt.util";
+import { User } from "@modules/auth/auth.model";
+import { ApiError } from "@core/ApiError";
+import { UserRole } from "@shared/enums/user-role.enum";
 
 /**
  * Authentication Middleware
- * 
+ *
  * Verifies JWT tokens and attaches user info to request
  * Provides role-based access control (RBAC)
  */
@@ -17,16 +17,16 @@ import { UserRole } from '@shared/enums/user-role.enum';
 export const authenticate = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> => {
   try {
     // Get token from Authorization header
     const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      throw ApiError.unauthorized('No token provided');
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      throw ApiError.unauthorized("No token provided");
     }
 
-    const token = authHeader.split(' ')[1];
+    const token = authHeader.split(" ")[1];
 
     // Verify token
     const payload = JwtUtil.verifyAccessToken(token);
@@ -34,7 +34,7 @@ export const authenticate = async (
     // Get user from database
     const user = await User.findById(payload.userId);
     if (!user) {
-      throw ApiError.unauthorized('User not found');
+      throw ApiError.unauthorized("User not found");
     }
 
     // Attach user to request
@@ -50,7 +50,7 @@ export const authenticate = async (
     if (error instanceof ApiError) {
       next(error);
     } else {
-      next(ApiError.unauthorized('Invalid or expired token'));
+      next(ApiError.unauthorized("Invalid or expired token"));
     }
   }
 };
@@ -61,14 +61,14 @@ export const authenticate = async (
 export const requireEmailVerification = (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): void => {
   if (!req.user) {
-    return next(ApiError.unauthorized('Authentication required'));
+    return next(ApiError.unauthorized("Authentication required"));
   }
 
   if (!req.user.isEmailVerified) {
-    return next(ApiError.forbidden('Email verification required'));
+    return next(ApiError.forbidden("Email verification required"));
   }
 
   next();
@@ -81,12 +81,14 @@ export const requireEmailVerification = (
 export const authorize = (...allowedRoles: UserRole[]) => {
   return (req: Request, res: Response, next: NextFunction): void => {
     if (!req.user) {
-      return next(ApiError.unauthorized('Authentication required'));
+      return next(ApiError.unauthorized("Authentication required"));
     }
 
     if (!allowedRoles.includes(req.user.role as UserRole)) {
       return next(
-        ApiError.forbidden('You do not have permission to access this resource')
+        ApiError.forbidden(
+          "You do not have permission to access this resource",
+        ),
       );
     }
 
@@ -101,15 +103,15 @@ export const authorize = (...allowedRoles: UserRole[]) => {
 export const optionalAuth = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> => {
   try {
     const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return next();
     }
 
-    const token = authHeader.split(' ')[1];
+    const token = authHeader.split(" ")[1];
     const payload = JwtUtil.verifyAccessToken(token);
 
     const user = await User.findById(payload.userId);

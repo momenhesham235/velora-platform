@@ -1,12 +1,12 @@
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Link } from 'react-router-dom';
-import { Button, Input } from '@/shared/components/ui';
-import { ForgotPasswordData } from '../types';
-import { forgotPasswordSchema } from '@/lib/validators/auth.validator';
-import { AuthLayout } from '../components/AuthLayout';
-import { FormError } from '../components/FormError';
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Link } from "react-router-dom";
+import { Button, Input } from "@/shared/components/ui";
+import { ForgotPasswordData } from "../types";
+import { forgotPasswordSchema } from "@/features/auth/validators/auth.validator";
+import { AuthLayout } from "../components/AuthLayout";
+import { FormError } from "../components/FormError";
 
 export function ForgotPasswordPage() {
   const [submittedEmail, setSubmittedEmail] = useState<string | null>(null);
@@ -37,7 +37,7 @@ export function ForgotPasswordPage() {
         title="Check your inbox"
         subtitle={
           <>
-            We sent a reset link to{' '}
+            We sent a reset link to{" "}
             <span className="text-foreground">{submittedEmail}</span>. It will
             expire in 30 minutes.
           </>
@@ -53,7 +53,12 @@ export function ForgotPasswordPage() {
       >
         <div className="flex flex-col items-center gap-5 py-2 text-center">
           <span className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-primary/15 text-primary">
-            <svg viewBox="0 0 24 24" fill="none" className="h-7 w-7" aria-hidden>
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              className="h-7 w-7"
+              aria-hidden
+            >
               <path
                 d="M3 7.5 12 13l9-5.5M4 6h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Z"
                 stroke="currentColor"
@@ -64,7 +69,7 @@ export function ForgotPasswordPage() {
             </svg>
           </span>
           <p className="text-sm leading-relaxed text-default-500">
-            Didn&apos;t get an email? Check your spam folder, or{' '}
+            Didn&apos;t get an email? Check your spam folder, or{" "}
             <button
               type="button"
               onClick={() => setSubmittedEmail(null)}
@@ -98,14 +103,20 @@ export function ForgotPasswordPage() {
           type="email"
           autoComplete="email"
           placeholder="you@company.com"
-          {...register('email')}
+          {...register("email")}
           error={errors.email?.message}
         />
 
         <FormError message={serverError} />
 
-        <Button type="submit" variant="primary" size="lg" loading={isSubmitting} fullWidth>
-          {isSubmitting ? 'Sending link…' : 'Send reset link'}
+        <Button
+          type="submit"
+          variant="primary"
+          size="lg"
+          loading={isSubmitting}
+          fullWidth
+        >
+          {isSubmitting ? "Sending link…" : "Send reset link"}
         </Button>
       </form>
     </AuthLayout>

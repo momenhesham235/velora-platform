@@ -1,4 +1,4 @@
-import { createContext, useContext, ReactNode, useEffect } from 'react';
+import { createContext, useContext, ReactNode, useEffect } from "react";
 
 /**
  * Velora is intentionally a single-mode dark product (matches the
@@ -6,29 +6,29 @@ import { createContext, useContext, ReactNode, useEffect } from 'react';
  * codebase can keep calling `useTheme()`, but mode is locked to 'dark' /
  * the `velora-dark` HeroUI theme.
  */
-type Theme = 'dark';
+type Theme = "dark";
 
 interface ThemeContextType {
   theme: Theme;
 }
 
-const ThemeContext = createContext<ThemeContextType>({ theme: 'dark' });
+const ThemeContext = createContext<ThemeContextType>({ theme: "dark" });
 
 interface ThemeProviderProps {
   children: ReactNode;
 }
 
-const VELORA_THEME_CLASS = 'velora-dark';
+const VELORA_THEME_CLASS = "velora-dark";
 
 export function ThemeProvider({ children }: ThemeProviderProps) {
   useEffect(() => {
     const root = document.documentElement;
-    root.classList.add('dark', VELORA_THEME_CLASS);
-    root.setAttribute('data-theme', 'dark');
+    root.classList.add("dark", VELORA_THEME_CLASS);
+    root.setAttribute("data-theme", "dark");
   }, []);
 
   return (
-    <ThemeContext.Provider value={{ theme: 'dark' }}>
+    <ThemeContext.Provider value={{ theme: "dark" }}>
       {children}
     </ThemeContext.Provider>
   );
