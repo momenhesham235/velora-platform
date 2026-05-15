@@ -1,21 +1,33 @@
-import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, Input, Modal } from '@/shared/components/ui';
-import { FormError } from '@/features/auth/components/FormError';
-import { extractErrorMessage } from '@/services/api/handlers';
-import { useCreateWorkspace } from '../hooks/useCreateWorkspace';
-import {
-  createWorkspaceSchema,
-  type CreateWorkspaceInput,
-} from '../schemas/workspace.schema';
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Button, Input, Modal, Textarea } from "@/shared/components/ui";
+import { FormError } from "@/features/auth/components/FormError";
+import { extractErrorMessage } from "@/services/api/handlers";
+import { useCreateWorkspace } from "../hooks/useCreateWorkspace";
+import { z } from "zod";
+import type { CreateWorkspaceInput } from "../types";
+
+const createWorkspaceSchema = z.object({
+  name: z
+    .string()
+    .min(2, "Workspace name must be at least 2 characters")
+    .max(100, "Workspace name cannot exceed 100 characters"),
+  description: z
+    .string()
+    .max(500, "Description cannot exceed 500 characters")
+    .optional(),
+});
 
 interface CreateWorkspaceModalProps {
   open: boolean;
   onClose: () => void;
 }
 
-export function CreateWorkspaceModal({ open, onClose }: CreateWorkspaceModalProps) {
+export function CreateWorkspaceModal({
+  open,
+  onClose,
+}: CreateWorkspaceModalProps) {
   const create = useCreateWorkspace();
 
   const {
@@ -30,18 +42,19 @@ export function CreateWorkspaceModal({ open, onClose }: CreateWorkspaceModalProp
   // Reset state every time the modal opens so a half-filled previous attempt
   // doesn't bleed into a new one.
   useEffect(() => {
-    if (open) {
-      reset();
-      create.reset();
-    }
-  }, [open, reset, create]);
+    if (!open) return;
+
+    reset();
+    create.reset();
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
 
   const onSubmit = (input: CreateWorkspaceInput) => {
     create.mutate(input, { onSuccess: () => onClose() });
   };
 
   const submitErrorMessage = create.error
-    ? extractErrorMessage(create.error, 'Could not create workspace.')
+    ? extractErrorMessage(create.error, "Could not create workspace.")
     : null;
 
   return (
@@ -52,13 +65,17 @@ export function CreateWorkspaceModal({ open, onClose }: CreateWorkspaceModalProp
       description="Create a container for a team, client, or initiative. You can rename or archive it later."
       footer={
         <>
-          <Button variant="ghost" onPress={onClose} isDisabled={create.isPending}>
+          <Button
+            variant="ghost"
+            onPress={onClose}
+            isDisabled={create.isPending}
+          >
             Cancel
           </Button>
           <Button
             variant="primary"
             onPress={() => handleSubmit(onSubmit)()}
-            isLoading={create.isPending}
+            loading={create.isPending}
           >
             Create workspace
           </Button>
@@ -70,24 +87,14 @@ export function CreateWorkspaceModal({ open, onClose }: CreateWorkspaceModalProp
           label="Name"
           placeholder="Acme Marketing"
           autoFocus
-          isInvalid={!!errors.name}
-          errorMessage={errors.name?.message}
-          {...register('name')}
+          error={errors.name?.message}
+          {...register("name")}
         />
-        <Input
-          label="Slug"
-          placeholder="acme-marketing"
-          description="Optional. Auto-generated from the name when blank."
-          isInvalid={!!errors.slug}
-          errorMessage={errors.slug?.message}
-          {...register('slug')}
-        />
-        <Input
+        <Textarea
           label="Description"
           placeholder="What is this workspace for?"
-          isInvalid={!!errors.description}
-          errorMessage={errors.description?.message}
-          {...register('description')}
+          error={errors.description?.message}
+          {...register("description")}
         />
         {submitErrorMessage ? <FormError message={submitErrorMessage} /> : null}
       </form>

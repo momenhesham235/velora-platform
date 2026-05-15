@@ -60,7 +60,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref,
   ) => {
-    const mapped = VARIANT_MAP[variant];
+    const mapped = VARIANT_MAP[variant] ?? VARIANT_MAP.primary;
 
     return (
       <HeroButton

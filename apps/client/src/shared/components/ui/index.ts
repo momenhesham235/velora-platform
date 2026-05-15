@@ -12,6 +12,7 @@
 export * from './tokens';
 export * from './button';
 export * from './input';
+export * from './textarea';
 export * from './card';
 export * from './typography';
 export * from './modal';

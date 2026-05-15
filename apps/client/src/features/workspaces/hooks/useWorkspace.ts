@@ -1,17 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
-import { workspacesApi } from '../api/workspaces.api';
 import { workspaceKeys } from '@/services/api/query-keys';
+import { workspacesApi } from '../api/workspaces.api';
 
 /**
- * Fetch a single workspace by id.
- *
- * Disabled when `id` is falsy so the hook is safe to call before a route
- * param has resolved (e.g. during route transitions).
+ * Get a single workspace by ID.
  */
-export function useWorkspace(id: string | undefined) {
+export function useWorkspace(workspaceId: string) {
   return useQuery({
-    queryKey: id ? workspaceKeys.detail(id) : workspaceKeys.detail('__none__'),
-    queryFn: () => workspacesApi.get(id as string),
-    enabled: !!id,
+    queryKey: workspaceKeys.detail(workspaceId),
+    queryFn: () => workspacesApi.getWorkspaceById(workspaceId),
+    enabled: !!workspaceId,
   });
 }

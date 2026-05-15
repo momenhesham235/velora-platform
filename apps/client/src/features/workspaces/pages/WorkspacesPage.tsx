@@ -10,7 +10,7 @@ export function WorkspacesPage() {
   const [createOpen, setCreateOpen] = useState(false);
   const { data, isPending, isError, error, refetch } = useWorkspaces();
 
-  const workspaces = data?.items ?? [];
+  const workspaces = data ?? [];
   const showEmpty = !isPending && !isError && workspaces.length === 0;
 
   return (

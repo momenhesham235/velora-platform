@@ -1,25 +1,19 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { workspacesApi } from '../api/workspaces.api';
 import { workspaceKeys } from '@/services/api/query-keys';
-import type { CreateWorkspaceInput } from '../schemas/workspace.schema';
-import type { Workspace } from '../types';
+import { workspacesApi } from '../api/workspaces.api';
+import type { CreateWorkspaceInput } from '../types';
 
 /**
- * Create a workspace.
- *
- * Invalidation surface: ONLY `workspaceKeys.lists()` — every cached list view
- * refetches, but any open detail pages (`workspaceKeys.detail(id)`) keep their
- * data. We also seed the detail cache with the newly-created workspace so
- * navigating to it after create has zero-latency.
+ * Create a new workspace.
  */
 export function useCreateWorkspace() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (input: CreateWorkspaceInput) => workspacesApi.create(input),
-
-    onSuccess: (created: Workspace) => {
-      queryClient.setQueryData(workspaceKeys.detail(created.id), created);
+    mutationFn: (data: CreateWorkspaceInput) =>
+      workspacesApi.createWorkspace(data),
+    onSuccess: () => {
+      // Invalidate workspace list to refetch
       queryClient.invalidateQueries({ queryKey: workspaceKeys.lists() });
     },
   });

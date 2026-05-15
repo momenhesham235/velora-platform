@@ -9,6 +9,7 @@ export const ROUTES = {
   VERIFY_EMAIL: '/verify-email',
   DASHBOARD: '/dashboard',
   WORKSPACES: '/workspaces',
+  WORKSPACE_DETAIL: '/workspaces/:id',
   PROJECTS: '/projects',
   TASKS: '/tasks',
 } as const;

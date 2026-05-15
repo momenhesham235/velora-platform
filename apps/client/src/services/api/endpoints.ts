@@ -22,6 +22,9 @@ export const API_ENDPOINTS = {
   WORKSPACES: {
     BASE: '/workspaces',
     BY_ID: (id: string) => `/workspaces/${id}`,
+    MEMBERS: (id: string) => `/workspaces/${id}/members`,
+    MEMBER_BY_ID: (workspaceId: string, userId: string) => 
+      `/workspaces/${workspaceId}/members/${userId}`,
   },
   
   // Projects

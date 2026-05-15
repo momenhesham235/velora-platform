@@ -6,6 +6,7 @@ import { env } from '@config/env.config';
 import { errorHandler, notFoundHandler } from '@middlewares/index';
 import { logger } from '@core/logger';
 import authRoutes from '@modules/auth/auth.routes';
+import workspaceRoutes from '@modules/workspaces/workspace.routes';
 import { swaggerSpec, swaggerUiOptions } from '@infrastructure/swagger';
 
 /**
@@ -112,6 +113,7 @@ export const createApp = (): Application => {
 
   // Feature routes
   app.use('/api/auth', authRoutes);
+  app.use('/api/workspaces', workspaceRoutes);
 
   // ============================================
   // ERROR HANDLING

@@ -5,6 +5,7 @@ import { ForgotPasswordPage } from '@/features/auth/pages/ForgotPasswordPage';
 import { EmailVerificationPage } from '@/features/auth/pages/EmailVerificationPage';
 import { DashboardPage } from '@/features/dashboard/pages/DashboardPage';
 import { WorkspacesPage } from '@/features/workspaces/pages/WorkspacesPage';
+import { WorkspaceDetailPage } from '@/features/workspaces/pages/WorkspaceDetailPage';
 import { ProjectsPage } from '@/features/projects/pages/ProjectsPage';
 import { TasksPage } from '@/features/tasks/pages/TasksPage';
 import { ROUTES } from '@/shared/constants';
@@ -23,9 +24,10 @@ export const routes: RouteConfig[] = [
   { path: ROUTES.VERIFY_EMAIL,    element: EmailVerificationPage, protected: false },
 
   // Protected — rendered inside MainLayout (sidebar + topbar)
-  { path: ROUTES.HOME,       element: DashboardPage,  protected: true },
-  { path: ROUTES.DASHBOARD,  element: DashboardPage,  protected: true },
-  { path: ROUTES.WORKSPACES, element: WorkspacesPage, protected: true },
-  { path: ROUTES.PROJECTS,   element: ProjectsPage,   protected: true },
-  { path: ROUTES.TASKS,      element: TasksPage,      protected: true },
+  { path: ROUTES.HOME,             element: DashboardPage,        protected: true },
+  { path: ROUTES.DASHBOARD,        element: DashboardPage,        protected: true },
+  { path: ROUTES.WORKSPACES,       element: WorkspacesPage,       protected: true },
+  { path: ROUTES.WORKSPACE_DETAIL, element: WorkspaceDetailPage,  protected: true },
+  { path: ROUTES.PROJECTS,         element: ProjectsPage,         protected: true },
+  { path: ROUTES.TASKS,            element: TasksPage,            protected: true },
 ];
