@@ -32,7 +32,7 @@ export function WorkspacesPage() {
         </div>
       ) : isError ? (
         <Card padding="lg" className="border-danger/40">
-          <Heading as="h2" size="h4" className="text-danger">
+          <Heading as="h2" size="h3" className="text-danger">
             Couldn’t load workspaces
           </Heading>
           <Text tone="secondary" className="mt-2">

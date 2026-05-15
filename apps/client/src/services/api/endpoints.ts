@@ -1,5 +1,4 @@
 export const API_ENDPOINTS = {
-  // Auth
   AUTH: {
     LOGIN: '/auth/login',
     REGISTER: '/auth/register',
@@ -10,32 +9,30 @@ export const API_ENDPOINTS = {
     VERIFY_EMAIL: '/auth/verify-email',
     ME: '/auth/me',
   },
-  
-  // Users
   USERS: {
     BASE: '/users',
     BY_ID: (id: string) => `/users/${id}`,
     PROFILE: '/users/profile',
   },
-  
-  // Workspaces
   WORKSPACES: {
     BASE: '/workspaces',
     BY_ID: (id: string) => `/workspaces/${id}`,
+    ME: (id: string) => `/workspaces/${id}/me`,
     MEMBERS: (id: string) => `/workspaces/${id}/members`,
-    MEMBER_BY_ID: (workspaceId: string, userId: string) => 
+    MEMBER_BY_ID: (workspaceId: string, userId: string) =>
       `/workspaces/${workspaceId}/members/${userId}`,
+    ACTIVITY: (id: string) => `/workspaces/${id}/activity`,
+    PROJECTS: (workspaceId: string) =>
+      `/workspaces/${workspaceId}/projects`,
+    PROJECT_BY_ID: (workspaceId: string, projectId: string) =>
+      `/workspaces/${workspaceId}/projects/${projectId}`,
+    TASKS: (workspaceId: string) => `/workspaces/${workspaceId}/tasks`,
+    TASK_BY_ID: (workspaceId: string, taskId: string) =>
+      `/workspaces/${workspaceId}/tasks/${taskId}`,
   },
-  
-  // Projects
-  PROJECTS: {
-    BASE: '/projects',
-    BY_ID: (id: string) => `/projects/${id}`,
-  },
-  
-  // Tasks
-  TASKS: {
-    BASE: '/tasks',
-    BY_ID: (id: string) => `/tasks/${id}`,
+  NOTIFICATIONS: {
+    BASE: '/notifications',
+    READ: (id: string) => `/notifications/${id}/read`,
+    READ_ALL: '/notifications/read-all',
   },
 } as const;

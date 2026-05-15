@@ -10,9 +10,17 @@ export const ROUTES = {
   DASHBOARD: '/dashboard',
   WORKSPACES: '/workspaces',
   WORKSPACE_DETAIL: '/workspaces/:id',
+  WORKSPACE_PROJECTS: '/workspaces/:workspaceId/projects',
+  WORKSPACE_TASKS: '/workspaces/:workspaceId/tasks',
   PROJECTS: '/projects',
   TASKS: '/tasks',
 } as const;
+
+export const workspaceRoute = {
+  detail: (id: string) => `/workspaces/${id}`,
+  projects: (workspaceId: string) => `/workspaces/${workspaceId}/projects`,
+  tasks: (workspaceId: string) => `/workspaces/${workspaceId}/tasks`,
+};
 
 export const QUERY_KEYS = {
   AUTH: {

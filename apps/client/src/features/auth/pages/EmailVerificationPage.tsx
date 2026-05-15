@@ -97,15 +97,11 @@ export function EmailVerificationPage() {
           >
             {resending ? 'Sending…' : resent ? 'Email sent ✓' : 'Resend verification email'}
           </Button>
-          <Button
-            as={Link}
-            to="/dashboard"
-            variant="secondary"
-            size="lg"
-            fullWidth
-          >
-            I&apos;ll verify later
-          </Button>
+          <Link to="/dashboard" className="block w-full">
+            <Button variant="secondary" size="lg" fullWidth>
+              I&apos;ll verify later
+            </Button>
+          </Link>
         </div>
       </div>
     </AuthLayout>

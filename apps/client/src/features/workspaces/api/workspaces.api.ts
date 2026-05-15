@@ -1,5 +1,6 @@
 import { http } from '@/services/api/client';
 import { API_ENDPOINTS } from '@/services/api/endpoints';
+import type { WorkspaceMeResponse } from '@velora/types';
 import type {
   Workspace,
   WorkspaceMemberDetail,
@@ -35,6 +36,9 @@ export const workspacesApi = {
    */
   getWorkspaceById: (id: string): Promise<Workspace> =>
     http.get<Workspace>(API_ENDPOINTS.WORKSPACES.BY_ID(id)),
+
+  getWorkspaceMe: (id: string): Promise<WorkspaceMeResponse> =>
+    http.get<WorkspaceMeResponse>(API_ENDPOINTS.WORKSPACES.ME(id)),
 
   /**
    * Update workspace

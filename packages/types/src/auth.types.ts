@@ -70,17 +70,3 @@ export interface AuthResponse {
   };
 }
 
-/**
- * Legacy Auth Response (for backward compatibility during migration)
- * TODO: Remove after frontend migration is complete
- */
-export interface LegacyAuthResponse {
-  user: {
-    id: string;
-    email: string;
-    name: string;
-    role: string;
-  };
-  accessToken: string;
-  refreshToken: string;
-}

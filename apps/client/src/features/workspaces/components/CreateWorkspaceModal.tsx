@@ -5,19 +5,8 @@ import { Button, Input, Modal, Textarea } from "@/shared/components/ui";
 import { FormError } from "@/features/auth/components/FormError";
 import { extractErrorMessage } from "@/services/api/handlers";
 import { useCreateWorkspace } from "../hooks/useCreateWorkspace";
-import { z } from "zod";
 import type { CreateWorkspaceInput } from "../types";
-
-const createWorkspaceSchema = z.object({
-  name: z
-    .string()
-    .min(2, "Workspace name must be at least 2 characters")
-    .max(100, "Workspace name cannot exceed 100 characters"),
-  description: z
-    .string()
-    .max(500, "Description cannot exceed 500 characters")
-    .optional(),
-});
+import { createWorkspaceSchema } from "../schemas/workspace.schema";
 
 interface CreateWorkspaceModalProps {
   open: boolean;

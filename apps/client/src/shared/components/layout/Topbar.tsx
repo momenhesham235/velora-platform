@@ -1,4 +1,5 @@
 import { Avatar, Button, Input, Kbd, Menu } from '@/shared/components/ui';
+import { WorkspaceSwitcher } from '@/shared/components/layout/WorkspaceSwitcher';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useLogout } from '@/features/auth/hooks/useLogout';
 import { getFullName } from '@/types/global.types';
@@ -58,6 +59,8 @@ export function Topbar({ onOpenSidebar }: TopbarProps) {
           endContent={<Kbd keys={['command']}>K</Kbd>}
         />
       </div>
+
+      <WorkspaceSwitcher />
 
       <div className="ml-auto flex items-center gap-2">
         <Button

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import {
   Button,
   Card,
@@ -17,6 +17,7 @@ import {
 import { extractErrorMessage } from '@/services/api/handlers';
 import { WorkspaceRole } from '../types';
 import { useAuth } from '@/features/auth/hooks/useAuth';
+import { workspaceRoute } from '@/shared/constants';
 
 export function WorkspaceDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -62,7 +63,7 @@ export function WorkspaceDetailPage() {
   if (workspaceError || !workspace) {
     return (
       <Card padding="lg" className="border-danger/40">
-        <Heading as="h2" size="h4" className="text-danger">
+        <Heading as="h2" size="h3" className="text-danger">
           Couldn't load workspace
         </Heading>
         <Text tone="secondary" className="mt-2">
@@ -89,10 +90,17 @@ export function WorkspaceDetailPage() {
         title={workspace.name}
         description={workspace.description || 'No description provided'}
         actions={
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
+            <Link to={workspaceRoute.projects(id!)}>
+              <Button variant="secondary">Projects</Button>
+            </Link>
+            <Link to={workspaceRoute.tasks(id!)}>
+              <Button variant="secondary">Tasks</Button>
+            </Link>
             {isOwner && (
               <Button
-                variant="danger"
+                variant="ghost"
+                className="text-danger"
                 onPress={() => setShowDeleteConfirm(true)}
               >
                 Delete Workspace
@@ -105,7 +113,7 @@ export function WorkspaceDetailPage() {
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Workspace Info */}
         <Card padding="lg">
-          <Heading as="h3" size="h4" className="mb-4">
+          <Heading as="h3" size="h3" className="mb-4">
             Workspace Information
           </Heading>
           <div className="space-y-3">
@@ -125,7 +133,7 @@ export function WorkspaceDetailPage() {
               <Text tone="secondary" className="text-sm">
                 Your Role
               </Text>
-              <Chip variant="primary">
+              <Chip tone="primary">
                 {currentUserMember?.role || 'Unknown'}
               </Chip>
             </div>
@@ -142,7 +150,7 @@ export function WorkspaceDetailPage() {
 
         {/* Members */}
         <Card padding="lg">
-          <Heading as="h3" size="h4" className="mb-4">
+          <Heading as="h3" size="h3" className="mb-4">
             Members ({members?.length || 0})
           </Heading>
           {membersLoading ? (
@@ -167,12 +175,12 @@ export function WorkspaceDetailPage() {
                     </Text>
                   </div>
                   <Chip
-                    variant={
+                    tone={
                       member.role === WorkspaceRole.OWNER
                         ? 'primary'
                         : member.role === WorkspaceRole.ADMIN
-                        ? 'secondary'
-                        : 'default'
+                          ? 'warning'
+                          : 'neutral'
                     }
                   >
                     {member.role}
@@ -188,7 +196,7 @@ export function WorkspaceDetailPage() {
       {showDeleteConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
           <Card padding="lg" className="max-w-md">
-            <Heading as="h3" size="h4" className="text-danger">
+            <Heading as="h3" size="h3" className="text-danger">
               Delete Workspace?
             </Heading>
             <Text className="mt-2">
@@ -204,7 +212,8 @@ export function WorkspaceDetailPage() {
                 Cancel
               </Button>
               <Button
-                variant="danger"
+                variant="ghost"
+                className="text-danger"
                 onPress={handleDelete}
                 loading={deleteWorkspace.isPending}
               >

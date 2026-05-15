@@ -1,5 +1,6 @@
 import { Card, Chip, Heading, Text } from '@/shared/components/ui';
 import { useNavigate } from 'react-router-dom';
+import { workspaceRoute } from '@/shared/constants';
 import type { Workspace } from '../types';
 
 interface WorkspaceCardProps {
@@ -13,13 +14,13 @@ export function WorkspaceCard({ workspace }: WorkspaceCardProps) {
   return (
     <button
       type="button"
-      onClick={() => navigate(`/workspaces/${workspace.id}`)}
+      onClick={() => navigate(workspaceRoute.detail(workspace.id))}
       className="text-left transition-transform hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-2xl"
     >
       <Card padding="lg">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0 flex-1">
-            <Heading as="h3" size="h4" className="truncate">
+            <Heading as="h3" size="h3" className="truncate">
               {workspace.name}
             </Heading>
             <Text tone="secondary" className="mt-1 text-xs">

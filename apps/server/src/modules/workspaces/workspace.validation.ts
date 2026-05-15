@@ -1,5 +1,11 @@
 import { z } from 'zod';
-import { WorkspaceRole } from './workspace.types';
+import { WorkspaceRole } from '@velora/types';
+
+const assignableMemberRoles = [
+  WorkspaceRole.ADMIN,
+  WorkspaceRole.MEMBER,
+  WorkspaceRole.VIEWER,
+] as const;
 
 /**
  * Workspace Validation Schemas
@@ -76,8 +82,10 @@ export const workspaceValidation = {
     body: z.object({
       userId: z.string({ required_error: 'User ID is required' }),
       role: z
-        .nativeEnum(WorkspaceRole, {
-          errorMap: () => ({ message: 'Invalid role' }),
+        .enum(assignableMemberRoles, {
+          errorMap: () => ({
+            message: 'Role must be admin, member, or viewer',
+          }),
         })
         .optional()
         .default(WorkspaceRole.MEMBER),
@@ -103,9 +111,21 @@ export const workspaceValidation = {
       userId: z.string({ required_error: 'User ID is required' }),
     }),
     body: z.object({
-      role: z.nativeEnum(WorkspaceRole, {
-        errorMap: () => ({ message: 'Invalid role' }),
+      role: z.enum(assignableMemberRoles, {
+        errorMap: () => ({
+          message: 'Role must be admin, member, or viewer',
+        }),
       }),
+    }),
+  }),
+
+  /**
+   * List workspaces with pagination
+   */
+  list: z.object({
+    query: z.object({
+      page: z.coerce.number().int().min(1).optional().default(1),
+      limit: z.coerce.number().int().min(1).max(100).optional().default(20),
     }),
   }),
 };

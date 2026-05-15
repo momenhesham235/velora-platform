@@ -1,11 +1,28 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
-import { IWorkspace, WorkspaceRole, IWorkspaceMember } from './workspace.types';
+import { WorkspaceRole } from '@velora/types';
 
 /**
  * Workspace Model
  * 
  * Mongoose schema and model for workspace management
  */
+
+// Internal types for Mongoose
+interface IWorkspaceMember {
+  userId: string;
+  role: WorkspaceRole;
+  joinedAt: Date;
+}
+
+interface IWorkspace {
+  _id: string;
+  name: string;
+  description?: string;
+  ownerId: string;
+  members: IWorkspaceMember[];
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 export interface IWorkspaceDocument extends Omit<IWorkspace, '_id'>, Document {}
 
@@ -57,7 +74,7 @@ const workspaceSchema = new Schema<IWorkspaceDocument>(
   {
     timestamps: true,
     toJSON: {
-      transform: (doc, ret) => {
+      transform: (_doc, ret: Record<string, unknown> & { _id?: unknown }) => {
         ret.id = ret._id;
         delete ret._id;
         delete ret.__v;

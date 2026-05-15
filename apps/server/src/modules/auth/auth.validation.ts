@@ -65,11 +65,12 @@ export const authValidation = {
    * Refresh token validation
    */
   refreshToken: z.object({
-    body: z.object({
-      refreshToken: z
-        .string({ required_error: 'Refresh token is required' })
-        .min(1, 'Refresh token is required'),
-    }),
+    body: z
+      .object({
+        refreshToken: z.string().min(1).optional(),
+      })
+      .optional()
+      .default({}),
   }),
 
   /**

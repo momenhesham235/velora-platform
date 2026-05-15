@@ -43,13 +43,40 @@ export class WorkspaceController {
   static getUserWorkspaces = asyncHandler(
     async (req: Request, res: Response, next: NextFunction) => {
       const userId = req.user!.id;
+      const page = Number(req.query.page) || 1;
+      const limit = Number(req.query.limit) || 20;
 
-      const workspaces = await WorkspaceService.getUserWorkspaces(userId);
+      const result = await WorkspaceService.getUserWorkspaces(
+        userId,
+        page,
+        limit
+      );
 
       return ResponseUtil.success(
         res,
         'Workspaces retrieved successfully',
-        workspaces
+        result.items,
+        200,
+        result.meta
+      );
+    }
+  );
+
+  /**
+   * Get current user's role and permissions in workspace
+   * GET /api/workspaces/:id/me
+   */
+  static getWorkspaceMe = asyncHandler(
+    async (req: Request, res: Response, next: NextFunction) => {
+      const userId = req.user!.id;
+      const { id } = req.params;
+
+      const me = await WorkspaceService.getWorkspaceMe(id, userId);
+
+      return ResponseUtil.success(
+        res,
+        'Workspace context retrieved successfully',
+        me
       );
     }
   );

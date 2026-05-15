@@ -24,7 +24,7 @@ export const generateSwaggerSpec = () => {
       ...swaggerDefinition,
       // Merge reusable schemas into components
       components: {
-        ...(swaggerDefinition.components || {}),
+        ...(swaggerDefinition?.components || {}),
         ...swaggerSchemas.components,
       },
     } as swaggerJsdoc.SwaggerDefinition,

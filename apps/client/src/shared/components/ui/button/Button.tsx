@@ -19,10 +19,7 @@ export type ButtonVariant = 'primary' | 'secondary' | 'ghost';
 export type ButtonSize = 'sm' | 'md' | 'lg';
 
 export interface ButtonProps
-  extends Omit<
-    HeroButtonProps,
-    'variant' | 'color' | 'size' | 'isLoading' | 'radius'
-  > {
+  extends Omit<HeroButtonProps, 'variant' | 'color' | 'size' | 'isLoading' | 'radius'> {
   variant?: ButtonVariant;
   size?: ButtonSize;
   loading?: boolean;

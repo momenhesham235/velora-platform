@@ -14,4 +14,6 @@ export const workspaceKeys = {
   /** Members of a specific workspace — invalidates separately from the workspace itself. */
   members: (workspaceId: string) =>
     [...workspaceKeys.detail(workspaceId), 'members'] as const,
+  me: (workspaceId: string) =>
+    [...workspaceKeys.detail(workspaceId), 'me'] as const,
 };

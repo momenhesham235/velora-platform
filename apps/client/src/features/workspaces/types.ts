@@ -1,24 +1,23 @@
 /**
- * Wire-level shapes for the workspaces feature.
- *
- * IMPORTANT: these must match the server DTO in @velora/types (when published)
- * or `apps/server/src/modules/workspaces/workspace.types.ts`. The agreed
- * convention is: Mongo ObjectIds are serialized to `string`, never raw.
- *
- * Form input shapes (CreateWorkspaceInput / UpdateWorkspaceInput) come from
- * the Zod schemas in `./schemas` — keep them out of this file so the runtime
- * schema stays the single source of truth.
+ * Workspace types — shared enums/DTOs from @velora/types with JSON-serialized dates.
  */
+import type {
+  CreateWorkspaceDTO,
+  UpdateWorkspaceDTO,
+  AddMemberDTO,
+  UpdateMemberRoleDTO,
+} from '@velora/types';
 
-export enum WorkspaceRole {
-  OWNER = 'owner',
-  ADMIN = 'admin',
-  MEMBER = 'member',
-}
+export {
+  WorkspaceRole,
+  Permission,
+} from '@velora/types';
+
+export type { WorkspaceMeResponse } from '@velora/types';
 
 export interface WorkspaceMember {
   userId: string;
-  role: WorkspaceRole;
+  role: import('@velora/types').WorkspaceRole;
   joinedAt: string;
 }
 
@@ -37,26 +36,11 @@ export interface WorkspaceMemberDetail {
   email: string;
   firstName: string;
   lastName: string;
-  role: WorkspaceRole;
+  role: import('@velora/types').WorkspaceRole;
   joinedAt: string;
 }
 
-// DTOs
-export interface CreateWorkspaceInput {
-  name: string;
-  description?: string;
-}
-
-export interface UpdateWorkspaceInput {
-  name?: string;
-  description?: string;
-}
-
-export interface AddMemberInput {
-  userId: string;
-  role?: WorkspaceRole;
-}
-
-export interface UpdateMemberRoleInput {
-  role: WorkspaceRole;
-}
+export type CreateWorkspaceInput = CreateWorkspaceDTO;
+export type UpdateWorkspaceInput = UpdateWorkspaceDTO;
+export type AddMemberInput = AddMemberDTO;
+export type UpdateMemberRoleInput = UpdateMemberRoleDTO;

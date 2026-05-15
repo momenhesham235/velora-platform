@@ -1,5 +1,6 @@
 import type { AxiosInstance } from 'axios';
 import { authRequestInterceptor } from './auth.interceptor';
+import { workspaceInterceptor } from './workspace.interceptor';
 import { createRefreshInterceptor } from './refresh.interceptor';
 import { errorResponseInterceptor } from './error.interceptor';
 
@@ -16,6 +17,7 @@ import { errorResponseInterceptor } from './error.interceptor';
  */
 export function attachInterceptors(client: AxiosInstance): void {
   client.interceptors.request.use(authRequestInterceptor);
+  client.interceptors.request.use(workspaceInterceptor);
 
   client.interceptors.response.use(
     (response) => response,

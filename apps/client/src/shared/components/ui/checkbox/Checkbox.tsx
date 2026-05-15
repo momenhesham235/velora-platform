@@ -1,4 +1,4 @@
-import { forwardRef, type ReactNode } from 'react';
+import { forwardRef, type ReactNode, type Ref } from 'react';
 import {
   Checkbox as HeroCheckbox,
   type CheckboxProps as HeroCheckboxProps,
@@ -13,11 +13,11 @@ export interface CheckboxProps
   children?: ReactNode;
 }
 
-export const Checkbox = forwardRef<HTMLLabelElement, CheckboxProps>(
+export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
   ({ size = 'sm', children, ...rest }, ref) => {
     return (
       <HeroCheckbox
-        ref={ref}
+        ref={ref as Ref<HTMLInputElement>}
         size={size}
         color="primary"
         radius="sm"

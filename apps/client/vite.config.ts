@@ -10,6 +10,7 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
+      '@velora/types': resolve(__dirname, '../../packages/types/src/index.ts'),
       '@': resolve(__dirname, './src'),
       '@/app': resolve(__dirname, './src/app'),
       '@/features': resolve(__dirname, './src/features'),

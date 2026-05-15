@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import {
   Avatar,
   Button,
@@ -7,19 +7,19 @@ import {
   Heading,
   Progress,
   Text,
-} from '@/shared/components/ui';
-import { useAuth } from '@/features/auth/hooks/useAuth';
-import { getFullName } from '@/types/global.types';
-import { PageHeader } from '@/shared/components/layout/PageHeader';
-import { ROUTES } from '@/shared/constants';
+} from "@/shared/components/ui";
+import { useAuth } from "@/features/auth/hooks/useAuth";
+import { getFullName } from "@/types/global.types";
+import { PageHeader } from "@/shared/components/layout/PageHeader";
+import { ROUTES } from "@/shared/constants";
 
 export function DashboardPage() {
   const { user } = useAuth();
-  const displayName = user ? getFullName(user) : 'there';
-  const firstName = user?.firstName ?? 'there';
+  const displayName = user ? getFullName(user) : "there";
+  const firstName = user?.firstName ?? "there";
   const initials = user
-    ? `${user.firstName[0] ?? ''}${user.lastName[0] ?? ''}`.toUpperCase()
-    : 'V';
+    ? `${user.firstName[0] ?? ""}${user.lastName[0] ?? ""}`.toUpperCase()
+    : "V";
 
   return (
     <div className="mx-auto w-full max-w-7xl">
@@ -29,10 +29,12 @@ export function DashboardPage() {
         description="Here's a snapshot of what's moving in your workspace today."
         actions={
           <>
-            <Button as={Link} to={ROUTES.PROJECTS} variant="secondary">
-              View projects
-            </Button>
-            <Button variant="primary">+ New task</Button>
+            <Link to={ROUTES.PROJECTS}>
+              <Button variant="secondary">View projects</Button>
+            </Link>
+            <Link to={ROUTES.TASKS}>
+              <Button variant="primary">+ New task</Button>
+            </Link>
           </>
         }
       />
@@ -42,7 +44,7 @@ export function DashboardPage() {
         <StatCard label="Active projects" value="0" trend="—" />
         <StatCard label="Open tasks" value="0" trend="—" />
         <StatCard label="Completed this week" value="0" trend="—" />
-        <StatCard label="Workspace members" value="1" trend="just you" />
+        <StatCard label="Workspace members" value="2" trend="just you" />
       </div>
 
       {/* Two-column body */}
@@ -50,8 +52,14 @@ export function DashboardPage() {
         <Card padding="none" className="lg:col-span-2">
           <div className="flex items-center justify-between border-b border-divider px-5 py-4">
             <div>
-              <Heading as="h2" size="h3">Today&apos;s focus</Heading>
-              <Text variant="caption" tone="secondary" className="!normal-case !tracking-normal mt-0.5">
+              <Heading as="h2" size="h3">
+                Today&apos;s focus
+              </Heading>
+              <Text
+                variant="caption"
+                tone="secondary"
+                className="!normal-case !tracking-normal mt-0.5"
+              >
                 Tasks you flagged for today
               </Text>
             </div>
@@ -68,7 +76,9 @@ export function DashboardPage() {
 
         <Card padding="none">
           <div className="border-b border-divider px-5 py-4">
-            <Heading as="h2" size="h3">Your profile</Heading>
+            <Heading as="h2" size="h3">
+              Your profile
+            </Heading>
           </div>
           <div className="space-y-5 px-5 py-5">
             <div className="flex items-center gap-3">
@@ -84,7 +94,7 @@ export function DashboardPage() {
             </div>
 
             <div className="space-y-3 text-sm">
-              <Row label="Role" value={<Chip>{user?.role ?? 'user'}</Chip>} />
+              <Row label="Role" value={<Chip>{user?.role ?? "user"}</Chip>} />
               <Row
                 label="Email verified"
                 value={

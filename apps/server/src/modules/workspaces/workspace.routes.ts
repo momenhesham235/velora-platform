@@ -2,18 +2,26 @@ import { Router } from 'express';
 import { WorkspaceController } from './workspace.controller';
 import { workspaceValidation } from './workspace.validation';
 import { validate } from '@middlewares/validate.middleware';
-import { authenticate } from '@middlewares/auth.middleware';
+import {
+  authenticate,
+  requireEmailVerification,
+} from '@middlewares/auth.middleware';
+import {
+  requirePermission,
+  requireWorkspaceMember,
+} from '@core/rbac';
+import { Permission } from '@velora/types';
 
 /**
  * Workspace Routes
  * 
- * Defines all workspace-related endpoints
+ * Defines all workspace-related endpoints with RBAC protection
  */
 
-const router = Router();
+const router: Router = Router();
 
-// All workspace routes require authentication
-router.use(authenticate);
+// All workspace routes require authentication and verified email
+router.use(authenticate, requireEmailVerification);
 
 /**
  * @openapi
@@ -101,7 +109,11 @@ router.post(
  *       401:
  *         description: Unauthorized
  */
-router.get('/', WorkspaceController.getUserWorkspaces);
+router.get(
+  '/',
+  validate(workspaceValidation.list),
+  WorkspaceController.getUserWorkspaces
+);
 
 /**
  * @openapi
@@ -144,8 +156,16 @@ router.get('/', WorkspaceController.getUserWorkspaces);
  *         description: Workspace not found
  */
 router.get(
+  '/:id/me',
+  validate(workspaceValidation.getById),
+  requireWorkspaceMember(),
+  WorkspaceController.getWorkspaceMe
+);
+
+router.get(
   '/:id',
   validate(workspaceValidation.getById),
+  requireWorkspaceMember(),
   WorkspaceController.getWorkspaceById
 );
 
@@ -195,6 +215,7 @@ router.get(
 router.patch(
   '/:id',
   validate(workspaceValidation.update),
+  requirePermission(Permission.WORKSPACE_UPDATE),
   WorkspaceController.updateWorkspace
 );
 
@@ -228,6 +249,7 @@ router.patch(
 router.delete(
   '/:id',
   validate(workspaceValidation.delete),
+  requirePermission(Permission.WORKSPACE_DELETE),
   WorkspaceController.deleteWorkspace
 );
 
@@ -276,6 +298,7 @@ router.delete(
 router.get(
   '/:id/members',
   validate(workspaceValidation.getById),
+  requirePermission(Permission.MEMBER_VIEW),
   WorkspaceController.getWorkspaceMembers
 );
 
@@ -328,6 +351,7 @@ router.get(
 router.post(
   '/:id/members',
   validate(workspaceValidation.addMember),
+  requirePermission(Permission.MEMBER_INVITE),
   WorkspaceController.addMember
 );
 
@@ -369,6 +393,7 @@ router.post(
 router.delete(
   '/:id/members/:userId',
   validate(workspaceValidation.removeMember),
+  requirePermission(Permission.MEMBER_REMOVE),
   WorkspaceController.removeMember
 );
 
@@ -423,6 +448,7 @@ router.delete(
 router.patch(
   '/:id/members/:userId',
   validate(workspaceValidation.updateMemberRole),
+  requirePermission(Permission.MEMBER_UPDATE_ROLE),
   WorkspaceController.updateMemberRole
 );
 

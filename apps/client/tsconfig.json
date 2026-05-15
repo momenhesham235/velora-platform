@@ -23,6 +23,7 @@
     /* Path Aliases */
     "baseUrl": ".",
     "paths": {
+      "@velora/types": ["../../packages/types/src/index.ts"],
       "@/*": ["./src/*"],
       "@/app/*": ["./src/app/*"],
       "@/features/*": ["./src/features/*"],

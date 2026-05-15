@@ -1,10 +1,10 @@
 import { NavLink } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { BrandMark } from '@/shared/components/branding/BrandMark';
-import { ROUTES } from '@/shared/constants';
+import { ROUTES, workspaceRoute } from '@/shared/constants';
+import { useWorkspaceStore } from '@/store/workspace.store';
 
 interface SidebarProps {
-  /** Whether the sidebar drawer is open on mobile */
   isOpen: boolean;
   onClose: () => void;
 }
@@ -15,17 +15,30 @@ interface NavItem {
   icon: () => JSX.Element;
 }
 
-const NAV: NavItem[] = [
-  { label: 'Dashboard',  to: ROUTES.DASHBOARD,  icon: DashboardIcon  },
-  { label: 'Workspaces', to: ROUTES.WORKSPACES, icon: WorkspaceIcon },
-  { label: 'Projects',   to: ROUTES.PROJECTS,   icon: ProjectIcon   },
-  { label: 'Tasks',      to: ROUTES.TASKS,      icon: TaskIcon      },
-];
-
 export function Sidebar({ isOpen, onClose }: SidebarProps) {
+  const activeWorkspaceId = useWorkspaceStore((s) => s.activeWorkspaceId);
+
+  const nav: NavItem[] = [
+    { label: 'Dashboard', to: ROUTES.DASHBOARD, icon: DashboardIcon },
+    { label: 'Workspaces', to: ROUTES.WORKSPACES, icon: WorkspaceIcon },
+    {
+      label: 'Projects',
+      to: activeWorkspaceId
+        ? workspaceRoute.projects(activeWorkspaceId)
+        : ROUTES.PROJECTS,
+      icon: ProjectIcon,
+    },
+    {
+      label: 'Tasks',
+      to: activeWorkspaceId
+        ? workspaceRoute.tasks(activeWorkspaceId)
+        : ROUTES.TASKS,
+      icon: TaskIcon,
+    },
+  ];
+
   return (
     <>
-      {/* Mobile scrim */}
       <div
         onClick={onClose}
         aria-hidden
@@ -44,9 +57,9 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
         </div>
 
         <nav className="flex-1 space-y-1 px-3 py-5">
-          {NAV.map((item) => (
+          {nav.map((item) => (
             <NavLink
-              key={item.to}
+              key={item.label}
               to={item.to}
               end={item.to === ROUTES.DASHBOARD}
               onClick={onClose}
@@ -78,12 +91,10 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 
         <div className="border-t border-divider p-4">
           <div className="rounded-lg border border-divider bg-content2/60 p-3">
-            <div className="text-xs font-medium text-foreground">
-              Velora Free
-            </div>
-            <div className="mt-1 text-xs text-default-500">
+            <p className="text-xs font-medium text-foreground">Velora Free</p>
+            <p className="mt-1 text-xs text-default-500">
               You&apos;re on the free plan. Upgrade anytime.
-            </div>
+            </p>
           </div>
         </div>
       </aside>

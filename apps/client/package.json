@@ -12,6 +12,7 @@
     "@heroui/react": "^2.8.10",
     "@hookform/resolvers": "^3.3.4",
     "@tanstack/react-query": "^5.20.0",
+    "@velora/types": "workspace:*",
     "axios": "^1.6.7",
     "clsx": "^2.1.1",
     "framer-motion": "^11.18.2",

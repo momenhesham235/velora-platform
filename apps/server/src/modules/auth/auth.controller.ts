@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { AuthService } from './auth.service';
+import { ApiError } from '@core/ApiError';
 import { ResponseUtil } from '@core/response';
 import { asyncHandler } from '@middlewares/asyncHandler';
 import {
@@ -65,7 +66,11 @@ export class AuthController {
     async (req: Request, res: Response, next: NextFunction) => {
       // Get refresh token from cookie or body
       const refreshToken =
-        req.cookies.refreshToken || req.body.refreshToken;
+        req.cookies.refreshToken || req.body?.refreshToken;
+
+      if (!refreshToken) {
+        throw ApiError.unauthorized('Refresh token is required');
+      }
 
       const result = await AuthService.refreshToken(refreshToken);
 

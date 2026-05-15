@@ -1,8 +1,8 @@
 /**
  * Global Types
- * 
+ *
  * IMPORTANT: User type MUST match backend response
- * Backend returns: firstName, lastName (NOT "name")
+ *
  */
 
 export interface User {
@@ -10,7 +10,7 @@ export interface User {
   email: string;
   firstName: string;
   lastName: string;
-  role: 'admin' | 'user' | 'manager';
+  role: "admin" | "user" | "manager";
   isEmailVerified: boolean;
   createdAt?: string;
   updatedAt?: string;

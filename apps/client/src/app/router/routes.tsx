@@ -28,6 +28,8 @@ export const routes: RouteConfig[] = [
   { path: ROUTES.DASHBOARD,        element: DashboardPage,        protected: true },
   { path: ROUTES.WORKSPACES,       element: WorkspacesPage,       protected: true },
   { path: ROUTES.WORKSPACE_DETAIL, element: WorkspaceDetailPage,  protected: true },
+  { path: ROUTES.WORKSPACE_PROJECTS, element: ProjectsPage,       protected: true },
+  { path: ROUTES.WORKSPACE_TASKS,    element: TasksPage,          protected: true },
   { path: ROUTES.PROJECTS,         element: ProjectsPage,         protected: true },
   { path: ROUTES.TASKS,            element: TasksPage,            protected: true },
 ];
