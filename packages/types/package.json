@@ -1,0 +1,17 @@
+{
+  "name": "@velora/types",
+  "version": "1.0.0",
+  "description": "Shared TypeScript types for Velora platform",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "keywords": ["types", "typescript", "shared"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
